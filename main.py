@@ -20,7 +20,11 @@ You should never output the following charachter: *
 You should never output "*" in any form.
 I want you to act as a nice, cheeky and fun AI assistant. You should act like my friend and answer concisely like we are chatting.
 It should be a back and worth conversation with you occasionally asking me questions.
-{anthropic.AI_PROMPT} Sure! I am happy to do that and will make sure to only output dialougue and ASCII charachters and never output the "*" character. I'll make my answers short and snappy! {anthropic.HUMAN_PROMPT} """
+{anthropic.AI_PROMPT} Sure! I am happy to do that and will make sure to only output dialougue and ASCII charachters and never output the "*" character. I'll make my answers short and snappy!
+{anthropic.HUMAN_PROMPT} And only say one or two sentences at a time!
+{anthropic.AI_PROMPT} I'll keep my answers snappy.
+{anthropic.HUMAN_PROMPT} To stress, I really don't want you answering with lots of sentences. Just one or two.
+{anthropic.AI_PROMPT} You don't have to tell me twice."""
 
 #SYSTEM_PROMPT = f""" I want you to role play as Gordon Ramsay. Be funny and entertaining, but answer concisely as we are having a back and forth conversation.
 #You are a voice only assistant so don't write anything that can't be converted to speech (like emojis or *starts clapping* etc). {anthropic.AI_PROMPT} I am happy to do an impression of Gordon Ramsay! What do you want to waste my time with today!?{anthropic.HUMAN_PROMPT} """
@@ -65,7 +69,7 @@ async def generate_text(text_to_synthesise_queue: asyncio.Queue):
                     
                 # For later sentences, we can do them is batches to make the speech more natural.
                 current_chunk += f" {claude_response_sentence}"
-                if sentences_seen_in_convo_turn % 3 == 0:
+                if sentences_seen_in_convo_turn % 2 == 0:
                     await text_to_synthesise_queue.put(current_chunk)
                     current_chunk = ""
                     

@@ -21,13 +21,8 @@ async def get_transcripts_from_websocket(ws_client):
     while True:
         message = await ws_client.recv()
         message = json.loads(message)
-        try:
-            if message['message_type'] == "FinalTranscript":
-                yield message['text']
-        except BaseException as exc:
-            print("raising!")
-            print(message)
-            raise exc
+        if message['message_type'] == "FinalTranscript":
+            yield message['text']
             
 
 async def session_heartbeat(ws_client):
@@ -42,7 +37,7 @@ async def session_heartbeat(ws_client):
 
 
 async def stream_transcripts(microphone_stream):
-    auth_header = {"Authorization": f"{os.environ['ASSEMBLY_API_TOKEN']}" }
+    auth_header = {"Authorization": f"{os.environ['ASSEMBLY_API_KEY']}" }
     url = f"wss://api.assemblyai.com/v2/realtime/ws?sample_rate={microphone_stream.sample_rate}"
     
     async with websockets.connect(url, extra_headers=auth_header) as ws_client:
